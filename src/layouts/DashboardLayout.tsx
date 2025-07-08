@@ -1,150 +1,20 @@
-import React, { useState } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  CssBaseline,
-  Box,
-  Switch,
-  Avatar,
-  Divider,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  SportsBasketball as PlayersIcon,
-  Event as TournamentsIcon,
-  Settings as SettingsIcon,
-} from "@mui/icons-material";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import DarkModeToggle from "../components/DarkModeToggle";
 
-const drawerWidth = 240;
-
-const navItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
-  { text: "Players", icon: <PlayersIcon />, link: "/players" },
-  { text: "Tournaments", icon: <TournamentsIcon />, link: "/tournaments" },
-  { text: "Settings", icon: <SettingsIcon />, link: "/settings" },
-];
-
-export default function DashboardLayout() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const location = useLocation();
-
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const drawer = (
-    <div>
-      <Toolbar sx={{ justifyContent: "center", p: 2 }}>
-        <Avatar
-          alt="Stockholm Basket"
-          src="https://stockholmbasket.se/wp-content/uploads/2021/01/cropped-stockholm-basket-logo.png"
-          sx={{ width: 80, height: 80 }}
-        />
-      </Toolbar>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem
-            button
-            key={item.text}
-            component={Link}
-            to={item.link}
-            selected={location.pathname === item.link}
-            sx={{
-              "&.Mui-selected": {
-                backgroundColor: "primary.main",
-                color: "#fff",
-                "& .MuiListItemIcon-root": { color: "#fff" },
-              },
-            }}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
-      </List>
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+      <Sidebar />
+      <div className="flex flex-col flex-1">
+        <Navbar />
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <Footer />
+        <DarkModeToggle />
+      </div>
     </div>
   );
+};
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          backgroundColor: darkMode ? "#333" : "#005BAC",
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-            Stockholm Basket Portal
-          </Typography>
-          <Switch
-            checked={darkMode}
-            onChange={() => setDarkMode(!darkMode)}
-            color="default"
-          />
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": { width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": { width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          mt: 8,
-          backgroundColor: darkMode ? "#121212" : "#f5f5f5",
-          minHeight: "100vh",
-        }}
-      >
-        <Outlet />
-      </Box>
-    </Box>
-  );
-}
+export default DashboardLayout;
