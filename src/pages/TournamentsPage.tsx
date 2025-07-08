@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Paper,
   CircularProgress,
 } from "@mui/material";
 
@@ -28,7 +28,7 @@ export default function TournamentsPage() {
         const res = await axios.get("/api/profixio");
         setData(res.data);
       } catch (err) {
-        console.error("Fel vid hämtning av data", err);
+        console.error("Fel vid hämtning av data:", err);
       } finally {
         setLoading(false);
       }
