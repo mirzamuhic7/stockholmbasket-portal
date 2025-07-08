@@ -1,75 +1,121 @@
-import React from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Outlet, Link } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
+  IconButton,
   Typography,
   Drawer,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
-  Switch,
+  CssBaseline,
   Box,
+  useTheme,
+  Switch,
 } from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Dashboard as DashboardIcon,
+  SportsBasketball as PlayersIcon,
+  Event as TournamentsIcon,
+  Settings as SettingsIcon,
+} from "@mui/icons-material";
 
 const drawerWidth = 240;
 
 export default function DashboardLayout() {
-  const location = useLocation();
-  const [darkMode, setDarkMode] = React.useState(
-    localStorage.getItem("darkMode") === "true"
-  );
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("darkMode", String(newMode));
-    document.body.style.backgroundColor = newMode ? "#121212" : "#fff";
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  const menuItems = [
-    { text: "Dashboard", path: "/" },
-    { text: "Turneringar", path: "/tournaments" },
-    { text: "Spelare", path: "/players" },
-    { text: "Inställningar", path: "/settings" },
-  ];
+  const drawer = (
+    <div>
+      <Toolbar />
+      <List>
+        {[
+          { text: "Dashboard", icon: <DashboardIcon />, link: "/" },
+          { text: "Players", icon: <PlayersIcon />, link: "/players" },
+          { text: "Tournaments", icon: <TournamentsIcon />, link: "/tournaments" },
+          { text: "Settings", icon: <SettingsIcon />, link: "/settings" },
+        ].map((item) => (
+          <ListItem button key={item.text} component={Link} to={item.link}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
+  );
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        sx={{ width: { sm: `calc(100% - ${drawerWidth}px)` }, ml: { sm: `${drawerWidth}px` } }}
+      >
         <Toolbar>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Stockholm Basket Portal
           </Typography>
-          <Switch checked={darkMode} onChange={toggleDarkMode} />
+          <Switch
+            checked={darkMode}
+            onChange={() => setDarkMode(!darkMode)}
+            color="default"
+          />
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box
+        component="main"
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: "auto" }}>
-          <List>
-            {menuItems.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                component={Link}
-                to={item.path}
-                selected={location.pathname === item.path}
-              >
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Outlet />
       </Box>
     </Box>
