@@ -1,3 +1,4 @@
+// src/pages/Tournaments.tsx
 import React, { useEffect, useState } from 'react'
 import { fetchTournaments } from '../api/profixio'
 import { DataGrid } from '@mui/x-data-grid'
@@ -6,12 +7,12 @@ export default function Tournaments() {
   const [tournaments, setTournaments] = useState([])
 
   useEffect(() => {
-    fetchTournaments().then(setTournaments)
+    fetchTournaments().then(setTournaments).catch(console.error)
   }, [])
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <h2>Tournaments</h2>
+      <h1>Tournaments</h1>
       <DataGrid
         rows={tournaments}
         columns={[
