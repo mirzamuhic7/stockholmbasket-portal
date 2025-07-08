@@ -1,11 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import DashboardLayout from "./layouts/DashboardLayout";
-import Dashboard from "./pages/Dashboard";
-import Players from "./pages/Players";
-import Tournaments from "./pages/Tournaments";
-import Settings from "./pages/Settings";
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import DashboardLayout from './layouts/DashboardLayout'
+import Dashboard from './pages/Dashboard'
+import Players from './pages/Players'
+import Tournaments from './pages/Tournaments'
+import Settings from './pages/Settings'
 
-function App() {
+export default function App() {
   return (
     <Router>
       <DashboardLayout>
@@ -17,7 +18,5 @@ function App() {
         </Routes>
       </DashboardLayout>
     </Router>
-  );
+  )
 }
-
-export default App;

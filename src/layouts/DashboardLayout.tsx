@@ -1,20 +1,19 @@
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import DarkModeToggle from "../components/DarkModeToggle";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { AppBar, Toolbar, Button, Box } from '@mui/material'
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
-      <Sidebar />
-      <div className="flex flex-col flex-1">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
-        <Footer />
-        <DarkModeToggle />
-      </div>
-    </div>
-  );
-};
+const DashboardLayout = ({ children }: any) => (
+  <Box sx={{ flexGrow: 1 }}>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit" component={Link} to="/">Dashboard</Button>
+        <Button color="inherit" component={Link} to="/players">Players</Button>
+        <Button color="inherit" component={Link} to="/tournaments">Tournaments</Button>
+        <Button color="inherit" component={Link} to="/settings">Settings</Button>
+      </Toolbar>
+    </AppBar>
+    <Box p={3}>{children}</Box>
+  </Box>
+)
 
-export default DashboardLayout;
+export default DashboardLayout
